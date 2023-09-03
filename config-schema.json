@@ -1,0 +1,27 @@
+{
+    "type": "object",
+    "properties": {
+      "accounts": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": {"type": "string"},
+            "users": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {"type": "string"},
+                  "mfa-arn": {"type": "string"}
+                },
+                "required": ["name", "mfa-arn"]
+              }
+            }
+          },
+          "required": ["name", "users"]
+        }
+      }
+    }
+  }
+  
