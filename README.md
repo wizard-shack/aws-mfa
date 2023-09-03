@@ -29,7 +29,7 @@ A lightweight utility to manage local aws user credentials with MFA enabled.
 ## How it works
 Your user should be configured locally with `aws configure`, just as you normally would, but because of the MFA condition (above) it cannot make any API requests without an STS Session Token using MFA. If you were to leak your access keys at this point, they'd be useless without the MFA device because the condition `"aws:MultiFactorAuthPresent": "false"` is met.
 
-By calling [`aws sts get-session-token`](https://docs.aws.amazon.com/cli/latest/reference/sts/get-session-token.html) and providing the MFA code, you will start a timed session for the user and it will now meet the be authenticated to make API requests.
+By calling [`aws sts get-session-token`](https://docs.aws.amazon.com/cli/latest/reference/sts/get-session-token.html) and providing the MFA code, you will start a timed session for the user, which changes `aws:MultiFactorAuthPresent` to `true`, and in-turn makes the user qualified to make API requests.
 
 
 ## Setup and Installation  
