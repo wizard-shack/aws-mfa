@@ -1,0 +1,7 @@
+# `config.yaml` example:
+---
+accounts:
+  - name: wizard-shack-prod
+    users :
+      - name: rhusein-cli
+        mfa-arn: arn:aws:iam::778811582527:mfa/rhusein-cli
