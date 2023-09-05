@@ -42,7 +42,7 @@ install_dependencies() {
     pip install -r requirements.txt
 }
 
-# Set Python interpreter path
+# Set Python interpreter path in installed copy of main.py
 set_python_path() {
     default_python_path=$(command -v python)
     read -r -p "Python path? [Default: $default_python_path]: " python_path
@@ -53,8 +53,8 @@ set_python_path() {
         exit 1
     fi
     
-    sed "1s@.*@#!$python_path@" main.py > tmp && mv tmp main.py
-    chmod +x main.py
+    sed "1s@.*@#!$python_path@" "$PROJECT_DIR/main.py" > tmp && mv tmp "$PROJECT_DIR/main.py"
+    chmod u+x "$PROJECT_DIR/main.py"
 }
 
 # Set shell alias for aws-mfa
@@ -67,9 +67,30 @@ set_shell_alias() {
 
     [ ! -f "$rcfile" ] && { echo "Invalid RC file. Exiting."; exit 1; }
 
-    awk '!/^# Alias for AWS MFA session initialization$/{print}' "$rcfile" > temp && mv temp "$rcfile"
+    # Remove existing alias if present
+    sed -i '/^alias aws-mfa=/d' "$rcfile"
+
+    # Add new alias
     echo "alias aws-mfa='$PROJECT_DIR/main.py'" >> "$rcfile"
 }
+
+# Export variables
+export_variables() {
+    case "$SHELL" in
+        *bash) rcfile="$HOME/.bashrc" ;;
+        *zsh) rcfile="$HOME/.zshrc" ;;
+        *) echo "Unsupported shell. Enter RC file path: "; read -r rcfile ;;
+    esac
+
+    [ ! -f "$rcfile" ] && { echo "Invalid RC file. Exiting."; exit 1; }
+
+    # Remove existing export if present
+    sed -i '/^export AWS_MFA_HOME=/d' "$rcfile"
+
+    # Add new export
+    echo "export AWS_MFA_HOME=$PROJECT_DIR" >> "$rcfile"
+}
+
 
 # Main Logic
 [ -d "$PROJECT_DIR" ] && ! diff -q "$PROJECT_DIR/config.yaml" "config.yaml" > /dev/null && prompt_existing_install
@@ -79,6 +100,7 @@ cp main.py config-schema.json requirements.txt config.yaml "$PROJECT_DIR"
 cp -R helpers session "$PROJECT_DIR"
 install_dependencies
 set_python_path
+export_variables
 set_shell_alias
 
 echo "Installation complete. Restart shell and start a session with 'aws-mfa'."
