@@ -2,16 +2,17 @@ import boto3
 import configparser
 import os
 from helpers.time_parse import seconds_to_time
+from helpers.rc_update import update_rc_file
 
 
-def start_session(user, duration=900, region='us-west-2', profile_name=None, mfa_code=None):
+def start_session(user, account, duration=900, region='us-west-2', profile_name=None, mfa_code=None):
     print(profile_name)
 
     region, user_name, mfa_arn = region, user['name'], user['mfa-arn']
     profile_name = profile_name or f"mfa-{user_name}"
     token_code = mfa_code or input('Enter the MFA token code: ')
 
-    session = boto3.Session(profile_name=user_name)
+    session = boto3.Session(profile_name=f"{account['name']}_{user['name']}")
     sts_client = session.client('sts')
 
     try:
@@ -22,11 +23,13 @@ def start_session(user, duration=900, region='us-west-2', profile_name=None, mfa
         exit(1)
 
     update_default_session(
-        credentials['Credentials'], user_name)
+        credentials['Credentials'], f"{account['name']}_{user['name']}")
 
     update_or_create_profiles(
         profile_name, region, credentials['Credentials'])
 
+    update_rc_file(f"export AWS_PROFILE={profile_name}")
+    
     print(f"Temporary profile {profile_name} created or updated.")
     print(f"Session expires in {seconds_to_time(duration)}.")
 
@@ -39,6 +42,8 @@ def handle_exception(e):
         print("Invalid MFA code format.")
     else:
         print(f"An unexpected error occurred: {e}")
+    print(err_msg)
+    exit(1)
 
 
 def update_default_session(credentials, user_name):

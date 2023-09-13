@@ -52,9 +52,8 @@ def _user_menu(stdscr, account):
     
     return selection
 
-def _get_account():
+def get_account():
     return curses.wrapper(_accounts_menu)
 
-def get_user():
-    account = _get_account()
+def get_user(account):
     return curses.wrapper(_user_menu, account)
