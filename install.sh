@@ -33,13 +33,14 @@ prompt_existing_install() {
         *) echo "Invalid choice. Exiting."; exit 1 ;;
     esac
 
-    read -r -p "Reinstall? [y/n]: " reinstall
+    read -r -p "Proceed with reinstall? [y/n]: " reinstall
     [ "$reinstall" != "y" ] && { echo "Exiting."; exit 0; }
 }
 
 # Install required Python packages
 install_dependencies() {
-    pip install -r requirements.txt
+    echo "Installing python dependencies"
+    pip install -q -r requirements.txt
 }
 
 # Set Python interpreter path in installed copy of main.py
@@ -92,11 +93,11 @@ export_variables() {
 }
 
 
-# Main Logic
 [ -d "$PROJECT_DIR" ] && ! diff -q "$PROJECT_DIR/config.yaml" "config.yaml" > /dev/null && prompt_existing_install
 
 mkdir -p "$PROJECT_DIR"
-cp main.py config-schema.json requirements.txt config.yaml "$PROJECT_DIR"
+cp main.py config-schema.json requirements.txt "$PROJECT_DIR"
+[ "$CONFIG_FILE_SELECTION" -eq 2 ] && cp config.yaml "$PROJECT_DIR"  # Only copy if option 2 is selected
 cp -R helpers session "$PROJECT_DIR"
 install_dependencies
 set_python_path

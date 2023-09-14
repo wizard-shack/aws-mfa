@@ -80,6 +80,10 @@ options:
                         Session duration in seconds. (Default: 900))
 ```
 
+## Code Walkthrough
+
+
+
 ## FAQ
 1. Why are files copied to `$HOME/.aws-mfa/` instead of running from the clones repo?
     - **Idempotency** - We want the cloned repo to remain unchanged to ensure predictable behavior.

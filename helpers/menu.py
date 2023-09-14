@@ -1,9 +1,11 @@
 import yaml
 import curses
-from helpers.validate_config import get_valid_config
+from helpers.validation import get_valid_config
 
 def _accounts_menu(stdscr):
-    '''Returns the selected account from the menu'''
+    '''
+    Returns the selected account from the menu
+    '''
     curses.curs_set(0)
     current_row = 0
 
@@ -29,7 +31,9 @@ def _accounts_menu(stdscr):
     return selection
 
 def _user_menu(stdscr, account):
-    '''Returns the selected user from the menu'''
+    '''
+    Returns the selected user from the menu
+    '''
     curses.curs_set(0)
     current_row = 0
 

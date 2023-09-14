@@ -1,5 +1,6 @@
 #!/path/to/python
 from helpers import menu, options_parse, config_edit
+from helpers import validation
 from session.start_session import start_session
 
 
@@ -16,11 +17,10 @@ account = menu.get_account()
 user = menu.get_user(account)
 
 # Start the session and update profiles
-# TODO: Don't do two things in one function
 start_session(user,
     account,
     duration=options.duration,
     region=options.region,
-    profile_name=options.profile,
+    session_profile=options.session_profile,
     mfa_code=options.mfa_code
     )

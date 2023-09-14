@@ -10,6 +10,9 @@ project = PythonProject(
     version="0.1.0"
 )
 
+project.add_git_ignore("config.yaml")
+project.add_git_ignore(".vscode/")
+
 project.add_dependency("attrs@>=23.1.0")
 project.add_dependency("boto3@>=1.28.29")
 project.add_dependency("boto3-stubs@>=1.28.29")

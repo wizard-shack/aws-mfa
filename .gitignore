@@ -70,16 +70,18 @@ celerybeat.pid
 .venv
 env/
 venv/
-
-# secrets
+ENV/
+env.bak/
+venv.bak/
+.spyderproject
+.spyproject
+.ropeproject
+/site
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+.pytype/
+cython_debug/
 config.yaml
-
-# logs
-logs/
-
-# pycache
-__pycache__/
-
-.env/
-
 .vscode/
