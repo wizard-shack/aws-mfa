@@ -29,7 +29,6 @@ def modify_rc_file(shell_rc_file, line_to_add):
 def update_rc_file(line_to_add):
     # Identify the default shell and the corresponding rc file
     default_shell = os.environ.get('SHELL', '/bin/bash')
-    # line_to_add = "export AWS_PROFILE=blah"
 
     if 'bash' in default_shell:
         modify_rc_file(os.path.expanduser('~/.bashrc'), line_to_add)
